@@ -2,9 +2,9 @@ package com.eddykaggia.contentcalendar.controller;
 
 import com.eddykaggia.contentcalendar.model.Content;
 import com.eddykaggia.contentcalendar.repository.ContentCollectionRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,4 +23,17 @@ public class ContentController {
         return repository.findAll();
     }
 
+    @GetMapping("/{id}")
+    //@Pathvariable maps the dynamic path to the input
+    public Content findById(@PathVariable Integer id) {
+        return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found!"));
+    }
+
+    //@ResponseStatus returns a  status code to indicate outcome of posting
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    //@RequestBody indicates that we are posting via the request body
+    public void create(@RequestBody Content content) {
+        repository.save(content);
+    }
 }
