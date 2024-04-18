@@ -4,7 +4,9 @@ import com.eddykaggia.contentcalendar.model.Content;
 import com.eddykaggia.contentcalendar.model.Status;
 import com.eddykaggia.contentcalendar.model.Type;
 import jakarta.annotation.PostConstruct;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,5 +54,10 @@ public class ContentCollectionRepository {
 
     public boolean existsById(Integer id) {
         return contentList.stream().filter(c -> c.id().equals(id)).count() == 1;
+    }
+
+
+    public void delete(Integer id) {
+        contentList.removeIf(c -> c.id().equals(id));
     }
 }
