@@ -2,6 +2,7 @@ package com.eddykaggia.contentcalendar.controller;
 
 import com.eddykaggia.contentcalendar.model.Content;
 import com.eddykaggia.contentcalendar.repository.ContentCollectionRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/content")
+@CrossOrigin
 public class ContentController {
 
     private final ContentCollectionRepository repository;
@@ -18,29 +20,29 @@ public class ContentController {
         this.repository = repository;
     }
 
-    // GET All Records
+    // GET => READ All Records
     @GetMapping("")
     public List<Content> findAll() {
         return repository.findAll();
     }
 
-    // GET Specific Record
+    // GET => READ A Specific Record
     @GetMapping("/{id}")
     //@Pathvariable maps the dynamic path to the input
     public Content findById(@PathVariable Integer id) {
         return repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found!"));
     }
 
-    // POST
+    // POST => CREATE A Record
     //@ResponseStatus returns a  status code to indicate outcome of posting
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     //@RequestBody indicates that we are posting via the request body
-    public void create(@RequestBody Content content) {
+    public void create(@Valid @RequestBody Content content) {
         repository.save(content);
     }
 
-    // PUT => UPDATE
+    // PUT => UPDATE A Record
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{id}")
     public void update(@RequestBody Content content, @PathVariable Integer id) {
@@ -50,7 +52,7 @@ public class ContentController {
         repository.save(content);
     }
 
-    // DELETE
+    // DELETE => REMOVE A Record
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
