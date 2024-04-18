@@ -29,6 +29,8 @@ public class ContentCollectionRepository {
     }
 
     public void save(Content content) {
+        //removeIf => checks if url param meets a specification before removing old record
+        contentList.removeIf(c -> c.id().equals(content.id()));
         contentList.add(content);
     }
 
@@ -46,5 +48,9 @@ public class ContentCollectionRepository {
         );
 
         contentList.add(c);
+    }
+
+    public boolean existsById(Integer id) {
+        return contentList.stream().filter(c -> c.id().equals(id)).count() == 1;
     }
 }
